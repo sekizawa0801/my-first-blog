@@ -5,15 +5,18 @@
         <div class="d-flex justify-content-between align-items-center">
             <h2>{{ post.title }}</h2>
             <div class="d-flex align-items-center">
-                {% if post.published_date %}
-                    <div class="date me-2">
-                        {{ post.published_date }}
-                    </div>
+                {% if not post.published_date %}
+                    <form method="POST" action="{% url 'post_publish' pk=post.pk %}" class="post-form me-2">{% csrf_token %}
+                        <button type="submit" class="btn btn-secondary">Publish</button>
+                    </form>
                 {% endif %}
                 {% if user.is_authenticated %}
-                    <a class="btn btn-secondary" href="{% url 'post_edit' pk=post.pk %}">
+                    <a class="btn btn-secondary mb-3 me-2" href="{% url 'post_edit' pk=post.pk %}">
                         <span class="bi bi-pencil">　編集</span>
                     </a>
+                    <form method="POST" action="{% url 'post_remove' pk=post.pk %}" class="post-form me-2">{% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
                 {% endif %}
             </div>
         </div>
